@@ -1,7 +1,6 @@
 # Production
 
-# Note that this runs honcho, which in turn runs a second 'MultiProcfile'
-# This better allows for multiple processes to be run simultaneously
+# See Claude "Heroku TabbyCat installation troubleshooting"
 
-web: honcho -f ProcfileMulti start
-worker: python manage.py runworker notifications adjallocation venues
+web: gunicorn tabbycat.wsgi --chdir tabbycat --log-file -
+worker: python tabbycat/manage.py runworker notifications adjallocation venues
