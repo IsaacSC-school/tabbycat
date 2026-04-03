@@ -1,20 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -e
 
-# Note that Heroku's node.js runtime instantiate before the python one
-# The node.js buildpack will automatically run `npm run build`
+echo "Building frontend assets..."
+npm install
+npm run build
 
-set -eo pipefail
+echo "Collecting static files..."
+python tabbycat/manage.py collectstatic --noinput
 
-echo "-----> I'm post-compile hook"
-cd ./tabbycat/
-
-echo "-----> Running database migration"
-python manage.py migrate --noinput
-
-echo "-----> Running dynamic preferences checks"
-python manage.py checkpreferences
-
-echo "-----> Running static files compilation"
-python manage.py collectstatic --noinput -v 0
-
-echo "-----> Post-compile done"
+echo "Build complete"
